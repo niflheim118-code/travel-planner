@@ -1,140 +1,372 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>澳門．漫步日和 | 旅遊行程</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://bundle.run/framer-motion@10.12.16"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>澳門 · 漫步日誌 | Macau Day Trip</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap');
+        :root {
+            --bg-color: #FdfcF8; /* 米白紙張色 */
+            --text-main: #4a4a4a; /* 深灰 */
+            --text-sub: #8c8c8c; /* 淺灰 */
+            --accent-color: #BFA48D; /* 奶茶色/卡其 */
+            --highlight: #D86D6D; /* 豆沙紅 (強調色) */
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #FAF9F6;
+            font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
         }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+
+        /* Hero Section */
+        header {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #fff 0%, #FdfcF8 100%);
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #DDE2C6;
-            border-radius: 10px;
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s ease-out forwards;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-sub);
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s ease-out 0.3s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            animation: bounce 2s infinite;
+            writing-mode: vertical-rl;
+            letter-spacing: 0.2em;
+        }
+
+        /* Timeline Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            position: relative;
+        }
+
+        /* The Vertical Line */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--accent-color) 10%, var(--accent-color) 90%, transparent);
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        /* Timeline Item */
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        /* The Dot */
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: transform 0.3s ease;
+        }
+
+        .item.visible .dot {
+            transform: translateX(-50%) scale(1.5);
+            background-color: var(--accent-color);
+        }
+
+        /* Content Card */
+        .content {
+            width: 45%;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 4px; /* Slightly rounded, almost sharp */
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid rgba(191, 164, 141, 0.2);
+            pointer-events: none;
+        }
+
+        .step-num {
+            font-family: 'Zen Old Mincho', serif;
+            font-size: 3rem;
+            color: rgba(191, 164, 141, 0.15);
+            position: absolute;
+            top: 0;
+            right: 15px;
+            line-height: 1;
+        }
+
+        .location {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            display: block;
+        }
+
+        .desc {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            text-align: justify;
+        }
+
+        .highlight-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--highlight);
+            border-bottom: 1px dashed var(--highlight);
+            padding-bottom: 2px;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background-color: #fff;
+            margin: 50px auto;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #eee;
+            position: relative;
+        }
+        
+        .tips-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .tips-list {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+        
+        .tips-list li {
+            margin-bottom: 10px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 20px;
+            }
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-left: 50px;
+                margin-bottom: 50px;
+            }
+            .item:nth-child(even) {
+                flex-direction: column;
+            }
+            .dot {
+                left: 20px;
+            }
+            .content {
+                width: 100%;
+            }
+            h1 { font-size: 2rem; }
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const { motion, AnimatePresence } = window.framerMotion;
+    <header>
+        <h1>澳門</h1>
+        <div class="subtitle">一日散策 · 舊城與繁華的交響</div>
+        <div class="subtitle" style="margin-top: 10px; font-size: 0.8rem;">Macau One Day Trip</div>
+        <div class="scroll-hint">SCROLL</div>
+    </header>
 
-        const App = () => {
-            const schedule = [
-                { time: "09:00", title: "香港出發", desc: "從香港上環或尖沙咀搭乘噴射飛航/金光飛航前往澳門碼頭，感受海浪與假期的序幕。", icon: "ship", nav: "https://www.google.com/maps/search/Macau+Ferry+Terminal" },
-                { time: "10:30", title: "新葡京酒店", desc: "抵達後轉乘接駁車。這座蓮花建築是澳門地標，門口的珠寶藝術品值得一拍。", icon: "camera", nav: "https://www.google.com/maps/search/Grand+Lisboa" },
-                { time: "11:30", title: "大三巴步行探索", desc: "沿途經過美心餅店、牛雜店。別忘了在巷弄間尋找貓咪的身影，順便試吃肉脯。", icon: "utensils", nav: "https://www.google.com/maps/search/Ruins+of+St.+Paul's" },
-                { time: "13:00", title: "玫瑰聖母堂 & 砲台", desc: "亮黃色的外牆在陽光下超美。體力夠的話，上砲台俯瞰充滿生活感的老城區。", icon: "map-pin", nav: "https://www.google.com/maps/search/Monte+Forte" },
-                { time: "14:30", title: "官也街 (搭乘33路)", desc: "搭上巴士前往氹仔。官也街是美食天堂，安德魯蛋撻與厚切牛雜都在這。", icon: "coffee", nav: "https://www.google.com/maps/search/Rua+do+Cunha" },
-                { time: "16:30", title: "金光大道漫步", desc: "威尼斯人、巴黎人、倫敦人。這條路充滿異國風情，夜晚亮燈後更迷人。", icon: "footprints", nav: "https://www.google.com/maps/search/Cotai+Strip" },
-                { time: "18:30", title: "永利皇宮噴泉秀", desc: "搭乘免費纜車，從空中欣賞水舞秀，對面巴黎人鐵塔的閃爍燈光是最佳背景。", icon: "sparkles", nav: "https://www.google.com/maps/search/Wynn+Palace+Fountain" },
-                { time: "20:00", title: "返回碼頭回港", desc: "搭乘新濠或美高梅的發財車回到碼頭。在船上好好休息，結束充實的一天。", icon: "anchor", nav: "https://www.google.com/maps/search/Taipa+Ferry+Terminal" }
-            ];
+    <div class="container">
+        <div class="timeline-line"></div>
 
-            return (
-                <div className="min-h-screen pb-20">
-                    {/* Header */}
-                    <header className="bg-white border-b border-gray-100 p-10 text-center relative overflow-hidden">
-                        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-                            <div className="text-4xl mb-3">🐾</div>
-                            <h1 className="text-2xl font-bold tracking-[0.2em] text-[#444]">澳門．漫步日和</h1>
-                            <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-[0.3em]">One Day Slow Trip with Cats</p>
-                        </motion.div>
-                        <div className="absolute -right-4 -bottom-2 text-6xl opacity-5 grayscale select-none">🐈</div>
-                    </header>
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">01</span>
+                <span class="location">拱北口岸 & 新葡京</span>
+                <p class="desc">9:53 出關。左手邊搭乘「新葡京」發財車。雖然排隊約 40 分鐘，但這條路線最順暢，無需回頭。孩子也可以上車喔。</p>
+            </div>
+        </div>
 
-                    <main className="max-w-md mx-auto p-6 mt-6">
-                        {/* 溫馨提示 */}
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-[#F0F2E8] p-4 rounded-2xl mb-10 flex items-start gap-3 border border-[#DDE2C6]"
-                        >
-                            <span className="text-[#8B9A46] text-xl">💡</span>
-                            <div className="text-sm">
-                                <p className="font-bold text-[#6D7A33] mb-0.5">貓咪小筆記</p>
-                                <p className="text-gray-600 leading-relaxed">行程約兩萬步，記得穿好走的鞋。支付寶很方便，但帶點現金買蛋撻會更快喔！</p>
-                            </div>
-                        </motion.div>
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">02</span>
+                <span class="location">漫步舊城區</span>
+                <p class="desc">在新葡京下車打卡（未成年不可進賭場）。導航前往大三巴，途經玫瑰聖母堂。沿途有店家熱情投餵肉乾、糕點，不妨邊走邊吃。</p>
+                <span class="highlight-tag">推薦：美心餅店、牛雜、手信試吃</span>
+            </div>
+        </div>
 
-                        {/* 時間軸 */}
-                        <div className="relative border-l border-dashed border-[#DDE2C6] ml-4">
-                            {schedule.map((item, index) => (
-                                <motion.div 
-                                    key={index}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="mb-12 ml-8 relative"
-                                >
-                                    <div className="absolute -left-[41px] top-1 bg-white border border-[#8B9A46] w-4 h-4 rounded-full flex items-center justify-center">
-                                        <div className="w-1.5 h-1.5 bg-[#8B9A46] rounded-full" />
-                                    </div>
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">03</span>
+                <span class="location">大三巴牌坊</span>
+                <p class="desc">澳門標誌性建築。多點位拍攝後，可選擇往上參觀炮台和博物館。感受歷史沈澱的氛圍。</p>
+            </div>
+        </div>
 
-                                    <div className="bg-white p-6 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-50 group hover:border-[#8B9A46]/30 transition-all duration-500">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <span className="text-[10px] font-black tracking-tighter text-[#8B9A46] bg-[#F4F6ED] px-2.5 py-1 rounded-full">
-                                                {item.time}
-                                            </span>
-                                            <span className="opacity-20 group-hover:opacity-100 transition-opacity">🐾</span>
-                                        </div>
-                                        
-                                        <h3 className="text-lg font-bold text-[#444] mb-2">{item.title}</h3>
-                                        <p className="text-sm text-gray-400 leading-relaxed mb-5 font-light">
-                                            {item.desc}
-                                        </p>
-                                        
-                                        <a 
-                                            href={item.nav} 
-                                            target="_blank" 
-                                            className="inline-flex items-center text-xs font-bold text-[#8B9A46] bg-white border border-[#8B9A46] px-4 py-2 rounded-full hover:bg-[#8B9A46] hover:text-white transition-all active:scale-95"
-                                        >
-                                            <i data-lucide="navigation" class="w-3 h-3 mr-2"></i>
-                                            Google 導航
-                                        </a>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">04</span>
+                <span class="location">前往官也街</span>
+                <p class="desc">導航至「官也街」，步行 10 分鐘至公車站。搭乘 33 路公車（約 20 分鐘）。記得提前準備支付寶/微信乘車碼。</p>
+                <span class="highlight-tag">Tips: 下車需按鈴</span>
+            </div>
+        </div>
 
-                        {/* Footer */}
-                        <footer className="mt-16 text-center">
-                            <p className="text-xs text-gray-300 tracking-[0.2em] mb-4">LEAVE ONLY FOOTPRINTS</p>
-                            <div className="inline-block relative">
-                                <span className="text-2xl opacity-20">🐾</span>
-                                <motion.span 
-                                    animate={{ y: [0, -5, 0] }} 
-                                    transition={{ repeat: Infinity, duration: 2 }}
-                                    className="absolute -top-6 -right-2 text-sm"
-                                >
-                                    Nya~
-                                </motion.span>
-                            </div>
-                        </footer>
-                    </main>
-                </div>
-            );
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">05</span>
+                <span class="location">官也街美食</span>
+                <p class="desc">抵達美食天堂。牛雜、蛋塔、各種手信店豐儉由人，開始盡情地逛吃模式。</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">06</span>
+                <span class="location">路氹奢華巡禮</span>
+                <p class="desc">步行約 1 公里。建議路線：威尼斯人 ➜ 巴黎人 ➜ 倫敦人。這三家連在一起，剛好可以在天黑後於巴黎人對面欣賞鐵塔燈光秀。</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">07</span>
+                <span class="location">永利皇宮纜車</span>
+                <p class="desc">步行 10 分鐘抵達永利皇宮（經過美高梅）。搭乘免費纜車，在空中俯瞰繁華夜景，體驗很棒。</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="dot"></div>
+            <div class="content">
+                <span class="step-num">08</span>
+                <span class="location">返程</span>
+                <p class="desc">前往「新濠影匯」站點，乘坐發財車返回拱北口岸（通常未排隊）。完美結束一天行程。</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tips-section">
+        <div class="tips-title">旅人筆記 · Note</div>
+        <ul class="tips-list">
+            <li>✦ 全程約兩萬步，景點緊密，沿途風光愜意。</li>
+            <li>✦ 支付寶、微信普及度極高，甚至現金支付店家也會找零錢（人民幣/港幣）。</li>
+            <li>✦ 帶小朋友與長輩請注意公車紅色座椅禮儀。</li>
+        </ul>
+    </div>
+
+    <script>
+        // Simple Interaction: Reveal elements on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-        
-        // 初始化圖標
-        setTimeout(() => lucide.createIcons(), 500);
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.item').forEach(item => {
+            observer.observe(item);
+        });
     </script>
 </body>
 </html>
