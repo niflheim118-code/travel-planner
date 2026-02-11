@@ -1,330 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { Compass, MapPin, Navigation, Utensils, Camera, Bus, Ship, Info, Heart, ChevronRight, ExternalLink } from 'lucide-react';
-
-const App = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [showCat, setShowCat] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowCat(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const itinerary = [
-    {
-      title: "香港出發 · 乘風破浪",
-      desc: "從香港港澳碼頭坐船前往澳門。吹著海風，開啟今天的冒險！",
-      detail: "建議提前訂票，抵達澳門後前往拱北/港珠澳大橋方向接駁站。",
-      icon: <Ship className="w-5 h-5" />,
-      tag: "交通",
-      tips: "記得帶身份證件與暈船藥",
-      mapSearch: "香港上環港澳客輪碼頭",
-      image: "https://images.unsplash.com/photo-1555412654-72a95a495858?auto=format&fit=crop&q=80&w=800",
-      imageAlt: "香港維多利亞港與客輪"
-    },
-    {
-      title: "新葡京 · 奢華打卡",
-      desc: "乘坐免費發財車抵達新葡京。這裡是不容錯過的賭王拍攝點。",
-      detail: "帶孩子不能進入賭場，但在門口與建築合影非常有紀念意義。隨後導航前往大三巴步道。",
-      icon: <Camera className="w-5 h-5" />,
-      tag: "景點",
-      tips: "步行路線順暢，不走回頭路",
-      mapSearch: "澳門新葡京酒店",
-      image: "新葡京.png",
-      imageAlt: "插畫風新葡京與貓咪"
-    },
-    {
-      title: "玫瑰聖母堂 · 巷弄美食",
-      desc: "途經玫瑰聖母堂，感受葡式建築魅力，並開始你的吃貨模式！",
-      detail: "肉脯、糕點、餅干、牛雜、奶茶... 店家都很大方，大膽試吃，胃口小的人甚至可以吃飽。",
-      icon: <Camera className="w-5 h-5" />,
-      tag: "景點+美食",
-      tips: "美心餅店、牛雜店必逛",
-      mapSearch: "澳門玫瑰聖母堂",
-      image: "https://images.unsplash.com/photo-1578306359560-63f58e4d371d?auto=format&fit=crop&q=80&w=800",
-      imageAlt: "玫瑰聖母堂"
-    },
-    {
-      title: "大三巴 · 歷史之巔",
-      desc: "抵達澳門地標。拍攝完畢後往上走是炮台與博物館。",
-      detail: "多個機位可供拍攝大三巴全景。若體力充沛可參觀收費的博物館。",
-      icon: <MapPin className="w-5 h-5" />,
-      tag: "景點",
-      tips: "建議穿舒適的鞋子",
-      mapSearch: "澳門大三巴牌坊",
-      image: "大三巴.png",
-      imageAlt: "插畫風大三巴與貓咪"
-    },
-    {
-      title: "穿梭官也街 · 當地交通",
-      desc: "導航至最近公交站，乘坐 33 路公車前往官也街。",
-      detail: "大概 10 分鐘步行至站點，公車約 20 分鐘抵達（需提前按下車鈴）。",
-      icon: <Bus className="w-5 h-5" />,
-      tag: "交通",
-      tips: "支援支付寶/微信乘車碼，避開紅色愛心座",
-      mapSearch: "澳門官也街",
-      image: "https://images.unsplash.com/photo-1563290317-1f4803960967?auto=format&fit=crop&q=80&w=800",
-      imageAlt: "澳門街道"
-    },
-    {
-      title: "官也街 · 美食天堂",
-      desc: "開始瘋狂逛吃模式！維記、安德魯蛋撻、各種手信店都在這裡。",
-      detail: "這裡的氛圍非常熱鬧，適合購買紀念品，感受滿滿的澳門煙火氣。",
-      icon: <Utensils className="w-5 h-5" />,
-      tag: "美食",
-      tips: "必吃葡式蛋撻",
-      mapSearch: "澳門官也街美食",
-      image: "官也街.png",
-      imageAlt: "插畫風官也街與貓咪"
-    },
-    {
-      title: "路氹金光大道 · 夢幻夜景",
-      desc: "步行導航約 1 公里，抵達威尼斯人、倫敦人與巴黎人。",
-      detail: "建議順序：威尼斯人 → 巴黎人 → 倫敦人。天黑後在巴黎人對面看鐵塔燈光秀。",
-      icon: <Camera className="w-5 h-5" />,
-      tag: "美景",
-      tips: "夜景拍照極美，建議天黑後到達",
-      mapSearch: "澳門巴黎人鐵塔",
-      image: "路氹金光大道.png",
-      imageAlt: "插畫風金光大道夜景與貓咪"
-    },
-    {
-      title: "永利皇宮 · 雲端纜車",
-      desc: "步行 10 分鐘抵達。經過美高梅，體驗免費噴泉纜車。",
-      detail: "纜車觀賞噴泉表演非常震撼，是這趟旅程完美的收尾。",
-      icon: <Navigation className="w-5 h-5" />,
-      tag: "休閒",
-      tips: "免費纜車必坐，CP值極高",
-      mapSearch: "澳門永利皇宮纜車",
-      image: "https://images.unsplash.com/photo-1570116526048-af9c17f463c2?auto=format&fit=crop&q=80&w=800",
-      imageAlt: "永利皇宮噴泉"
-    },
-    {
-      title: "返程 · 滿載而歸",
-      desc: "抵達新濠乘車點，坐發財車返回口岸或碼頭。",
-      detail: "一整天兩萬步，雖然疲憊但收穫滿滿的風景與美食。",
-      icon: <Compass className="w-5 h-5" />,
-      tag: "結束",
-      tips: "支付寶/微信普及率高，不需太多現金",
-      mapSearch: "澳門外港客運碼頭",
-      image: "https://images.unsplash.com/photo-1542614396-1c80c2f1f501?auto=format&fit=crop&q=80&w=800",
-      imageAlt: "澳門海上交通"
-    }
-  ];
-
-  const openGoogleMap = (query) => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-    window.open(url, '_blank');
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F9F7F2] text-[#5D554D] font-sans">
-      <div className="max-w-5xl mx-auto p-4 md:p-8">
-        {/* Header - 修復亂碼問題 */}
-        <header className="text-center mb-10 md:mb-12 relative">
-          <div className="inline-flex items-center justify-center gap-4 relative">
-            {/* 標題左側貓咪頭像修復 */}
-            <div className="bg-[#EBE3D5] p-2 rounded-xl shadow-sm">
-              <svg width="24" height="24" viewBox="0 0 200 200" className="fill-[#5D554D]">
-                <circle cx="100" cy="120" r="60" />
-                <path d="M60 80l20-40 20 40z M140 80l-20-40-20 40z" />
-                <circle cx="80" cy="110" r="5" fill="white" />
-                <circle cx="120" cy="110" r="5" fill="white" />
-                <path d="M95 130 q5 5 10 0" stroke="white" fill="none" strokeWidth="2" />
-              </svg>
-            </div>
-            
-            <div className="text-left">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-widest text-[#4A443F]">澳門一日遊</h1>
-              <p className="text-[10px] md:text-sm text-[#8C8379] tracking-[0.2em] uppercase">Macau One Day Vibe</p>
-            </div>
-
-            {/* 右上角的小裝飾 */}
-            <div className="absolute -top-4 -right-12 md:-top-6 md:-right-16 opacity-70">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B8A99A" strokeWidth="2">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 8v8M8 12h8" />
-              </svg>
-            </div>
-          </div>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-          
-          {/* 左側：互動時間軸導航 */}
-          <nav className="lg:col-span-4 bg-white/50 backdrop-blur-sm rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-sm lg:h-fit lg:sticky lg:top-8 border border-[#EBE3D5]">
-            <h2 className="text-base md:text-lg font-bold mb-4 md:mb-6 flex items-center gap-2">
-              <Compass className="w-5 h-5 text-[#B8A99A]" /> 行程進度
-            </h2>
-            <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 gap-3 scrollbar-hide">
-              {itinerary.map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setActiveStep(idx);
-                    if (window.innerWidth < 1024) {
-                      const el = document.getElementById('detail-card');
-                      if (el) window.scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
-                    }
-                  }}
-                  className={`flex-shrink-0 lg:flex-shrink-1 text-left p-3 rounded-xl transition-all duration-300 flex items-center gap-3 border min-w-[160px] lg:min-w-0 ${
-                    activeStep === idx 
-                    ? "bg-white border-[#D9C5B2] shadow-md lg:translate-x-2" 
-                    : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
-                >
-                  <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] md:text-xs ${activeStep === idx ? "bg-[#B8A99A] text-white" : "bg-gray-200"}`}>
-                    {idx + 1}
-                  </div>
-                  <span className={`text-xs md:text-sm font-medium truncate ${activeStep === idx ? "text-[#4A443F]" : ""}`}>{item.title}</span>
-                  <ChevronRight className={`w-4 h-4 ml-auto text-[#B8A99A] hidden lg:block ${activeStep === idx ? "opacity-100" : "opacity-0"}`} />
-                </button>
-              ))}
-            </div>
-            
-            <div className="mt-4 md:mt-8 pt-4 md:pt-6 border-t border-[#EBE3D5] text-[10px] md:text-xs text-[#8C8379] flex items-center gap-2">
-              <Info className="w-4 h-4" />
-              <span>約 20,000 步，保持體力喵～</span>
-            </div>
-          </nav>
-
-          {/* 右側：詳細內容卡片 */}
-          <section id="detail-card" className="lg:col-span-8">
-            <div className="bg-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[#EBE3D5] overflow-hidden transition-all duration-500">
-              
-              {/* 景點圖片 */}
-              <div className="relative h-48 md:h-80 overflow-hidden bg-[#F2F2F2]">
-                <img 
-                  src={itinerary[activeStep].image} 
-                  alt={itinerary[activeStep].imageAlt}
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                  onError={(e) => { 
-                    e.target.src = "https://images.unsplash.com/photo-1444464666168-49d633b867ad?auto=format&fit=crop&q=80&w=800";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white/90 backdrop-blur-md text-[#B8A99A] text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider shadow-sm">
-                    {itinerary[activeStep].tag}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6 md:p-10 lg:p-12 relative">
-                <div className="flex items-center justify-between mb-6 md:mb-8">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-[#F2EFE9] p-3 md:p-4 rounded-xl md:rounded-2xl text-[#B8A99A]">
-                      {itinerary[activeStep].icon}
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-[#4A443F]">{itinerary[activeStep].title}</h3>
-                  </div>
-                  <div className="hidden sm:block">
-                     <Heart className="text-[#E8D9C5] cursor-pointer hover:fill-[#E8D9C5] transition-colors" />
-                  </div>
-                </div>
-
-                <p className="text-base md:text-lg leading-relaxed text-[#6B635A] mb-8">
-                  {itinerary[activeStep].desc}
-                </p>
-                
-                <div className="bg-[#FDFCF9] border-l-4 border-[#D9C5B2] p-4 md:p-6 rounded-r-2xl mb-8">
-                  <h4 className="text-xs md:text-sm font-bold text-[#8C8379] mb-2 flex items-center gap-2">
-                    <Navigation className="w-4 h-4" /> 喵星人導航提示
-                  </h4>
-                  <p className="text-xs md:text-sm text-[#7D746A] leading-relaxed italic">
-                    {itinerary[activeStep].detail}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-                  <div className="bg-[#F2F2F2] rounded-xl p-4 text-center">
-                    <p className="text-[10px] uppercase text-[#A8A096] mb-1 tracking-widest">貼心提醒</p>
-                    <p className="text-xs md:text-sm font-medium">{itinerary[activeStep].tips}</p>
-                  </div>
-                  <div className="bg-[#EBE3D5]/30 rounded-xl p-4 text-center border border-dashed border-[#B8A99A]">
-                    <p className="text-[10px] uppercase text-[#A8A096] mb-1 tracking-widest">推薦程度</p>
-                    <div className="flex justify-center gap-1">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <span key={s} className="text-[#B8A99A] text-xs">★</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center gap-6">
-                  <button 
-                    onClick={() => openGoogleMap(itinerary[activeStep].mapSearch)}
-                    className="w-full flex items-center justify-center gap-3 bg-[#5D554D] hover:bg-[#4A443F] text-white px-8 py-4 rounded-2xl transition-all duration-300 text-sm font-bold shadow-lg hover:shadow-xl active:scale-95"
-                  >
-                    <MapPin className="w-5 h-5 text-[#D9C5B2]" />
-                    使用 Google Map 導航
-                    <ExternalLink className="w-4 h-4 opacity-50" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 md:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white/80 p-5 md:p-6 rounded-2xl md:rounded-3xl border border-[#EBE3D5] flex items-center gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-400 font-bold text-sm md:text-base">¥</div>
-                <div>
-                  <h5 className="font-bold text-xs md:text-sm text-[#4A443F]">支付提醒</h5>
-                  <p className="text-[10px] md:text-xs text-[#8C8379]">微信、支付寶普及度極高</p>
-                </div>
-              </div>
-              <div className="bg-white/80 p-5 md:p-6 rounded-2xl md:rounded-3xl border border-[#EBE3D5] flex items-center gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-50 rounded-full flex items-center justify-center text-orange-400">
-                  <Navigation className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-xs md:text-sm text-[#4A443F]">交通秘訣</h5>
-                  <p className="text-[10px] md:text-xs text-[#8C8379]">善用發財車與 33 路公車</p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <footer className="mt-12 md:mt-20 text-center pb-8 md:pb-12 px-4">
-          <p className="text-[10px] md:text-xs text-[#B8A99A] font-light italic leading-relaxed">
-            「雖然一天兩萬步，但風景與美食讓一切都值得。」— 祝你在澳門玩得愉快！
-          </p>
-        </footer>
-      </div>
-
-      {showCat && (
-        <div className="fixed bottom-6 right-6 z-50 group cursor-pointer hidden md:block">
-          <div className="bg-white p-3 rounded-2xl shadow-2xl border border-[#EBE3D5] relative transform group-hover:-translate-y-2 transition-transform">
-             <div className="absolute -top-10 right-2 bg-black text-white text-[10px] px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-               跟我來喵！
-             </div>
-             <svg width="32" height="32" viewBox="0 0 200 200" className="fill-[#5D554D]">
-               <circle cx="100" cy="120" r="60" />
-               <path d="M60 80l20-40 20 40z M140 80l-20-40-20 40z" />
-               <circle cx="80" cy="110" r="5" fill="white" />
-               <circle cx="120" cy="110" r="5" fill="white" />
-               <path d="M95 130 q5 5 10 0" stroke="white" fill="none" strokeWidth="2" />
-             </svg>
-          </div>
-        </div>
-      )}
-
-      <style dangerouslySetInnerHTML={{ __html: `
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>澳門．漫步日和 | 旅遊行程</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://bundle.run/framer-motion@10.12.16"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap');
         body {
-          font-family: 'Noto Sans TC', sans-serif;
-          -webkit-tap-highlight-color: transparent;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FAF9F6;
         }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
         }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #DDE2C6;
+            border-radius: 10px;
         }
-      `}} />
-    </div>
-  );
-};
+    </style>
+</head>
+<body>
+    <div id="root"></div>
 
-export default App;
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion, AnimatePresence } = window.framerMotion;
+
+        const App = () => {
+            const schedule = [
+                { time: "09:00", title: "香港出發", desc: "從香港上環或尖沙咀搭乘噴射飛航/金光飛航前往澳門碼頭，感受海浪與假期的序幕。", icon: "ship", nav: "https://www.google.com/maps/search/Macau+Ferry+Terminal" },
+                { time: "10:30", title: "新葡京酒店", desc: "抵達後轉乘接駁車。這座蓮花建築是澳門地標，門口的珠寶藝術品值得一拍。", icon: "camera", nav: "https://www.google.com/maps/search/Grand+Lisboa" },
+                { time: "11:30", title: "大三巴步行探索", desc: "沿途經過美心餅店、牛雜店。別忘了在巷弄間尋找貓咪的身影，順便試吃肉脯。", icon: "utensils", nav: "https://www.google.com/maps/search/Ruins+of+St.+Paul's" },
+                { time: "13:00", title: "玫瑰聖母堂 & 砲台", desc: "亮黃色的外牆在陽光下超美。體力夠的話，上砲台俯瞰充滿生活感的老城區。", icon: "map-pin", nav: "https://www.google.com/maps/search/Monte+Forte" },
+                { time: "14:30", title: "官也街 (搭乘33路)", desc: "搭上巴士前往氹仔。官也街是美食天堂，安德魯蛋撻與厚切牛雜都在這。", icon: "coffee", nav: "https://www.google.com/maps/search/Rua+do+Cunha" },
+                { time: "16:30", title: "金光大道漫步", desc: "威尼斯人、巴黎人、倫敦人。這條路充滿異國風情，夜晚亮燈後更迷人。", icon: "footprints", nav: "https://www.google.com/maps/search/Cotai+Strip" },
+                { time: "18:30", title: "永利皇宮噴泉秀", desc: "搭乘免費纜車，從空中欣賞水舞秀，對面巴黎人
