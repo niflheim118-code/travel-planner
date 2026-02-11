@@ -120,13 +120,31 @@ const App = () => {
   return (
     <div className="min-h-screen bg-[#F9F7F2] text-[#5D554D] font-sans">
       <div className="max-w-5xl mx-auto p-4 md:p-8">
-        {/* Header */}
+        {/* Header - 修復亂碼問題 */}
         <header className="text-center mb-10 md:mb-12 relative">
-          <div className="inline-block relative">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-widest text-[#4A443F] mb-2">澳門一日遊</h1>
-            <p className="text-[10px] md:text-sm text-[#8C8379] tracking-[0.2em] uppercase">Macau One Day Vibe</p>
-            <div className="absolute -top-4 -right-6 md:-top-6 md:-right-8 opacity-70 animate-bounce">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="#5D554D"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+          <div className="inline-flex items-center justify-center gap-4 relative">
+            {/* 標題左側貓咪頭像修復 */}
+            <div className="bg-[#EBE3D5] p-2 rounded-xl shadow-sm">
+              <svg width="24" height="24" viewBox="0 0 200 200" className="fill-[#5D554D]">
+                <circle cx="100" cy="120" r="60" />
+                <path d="M60 80l20-40 20 40z M140 80l-20-40-20 40z" />
+                <circle cx="80" cy="110" r="5" fill="white" />
+                <circle cx="120" cy="110" r="5" fill="white" />
+                <path d="M95 130 q5 5 10 0" stroke="white" fill="none" strokeWidth="2" />
+              </svg>
+            </div>
+            
+            <div className="text-left">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-widest text-[#4A443F]">澳門一日遊</h1>
+              <p className="text-[10px] md:text-sm text-[#8C8379] tracking-[0.2em] uppercase">Macau One Day Vibe</p>
+            </div>
+
+            {/* 右上角的小裝飾 */}
+            <div className="absolute -top-4 -right-12 md:-top-6 md:-right-16 opacity-70">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B8A99A" strokeWidth="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v8M8 12h8" />
+              </svg>
             </div>
           </div>
         </header>
@@ -174,14 +192,13 @@ const App = () => {
           <section id="detail-card" className="lg:col-span-8">
             <div className="bg-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-[#EBE3D5] overflow-hidden transition-all duration-500">
               
-              {/* 景點圖片 - 這裡現在會顯示你上傳的圖檔 */}
+              {/* 景點圖片 */}
               <div className="relative h-48 md:h-80 overflow-hidden bg-[#F2F2F2]">
                 <img 
                   src={itinerary[activeStep].image} 
                   alt={itinerary[activeStep].imageAlt}
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   onError={(e) => { 
-                    // 如果本地圖檔載入失敗，顯示預設圖
                     e.target.src = "https://images.unsplash.com/photo-1444464666168-49d633b867ad?auto=format&fit=crop&q=80&w=800";
                   }}
                 />
@@ -286,7 +303,7 @@ const App = () => {
                <path d="M60 80l20-40 20 40z M140 80l-20-40-20 40z" />
                <circle cx="80" cy="110" r="5" fill="white" />
                <circle cx="120" cy="110" r="5" fill="white" />
-               <path d="M95 130 q5 5 10 0" stroke="white" fill="none" />
+               <path d="M95 130 q5 5 10 0" stroke="white" fill="none" strokeWidth="2" />
              </svg>
           </div>
         </div>
